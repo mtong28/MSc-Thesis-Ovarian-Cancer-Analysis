@@ -1,5 +1,5 @@
 # MSc-Thesis-Ovarian-Cancer-Analysis
-markdown
+
 # Transcriptomic Analysis of Ovarian Cancer (MSc Thesis)
 
 This repository contains core scripts used for my MSc thesis at Queen Mary University of London, focusing on the transcriptomic analysis of ovarian cancer patients.
