@@ -1,6 +1,8 @@
 # MSc-Thesis-Ovarian-Cancer-Analysis (Transcriptomic Analysis)
 
-This repository contains the core workflow and R scripts used for my MSc thesis at Queen Mary University of London, focusing on the identification and validation of disease-associated lncRNAs in High-Grade Serous Ovarian Cancer (HGSOC) and other cancer types.
+This repository contains the core workflow, Linux environment logs, custom Python scripts, and R scripts used for my MSc thesis at Queen Mary University of London. The project focuses on the identification and validation of disease-associated lncRNAs in High-Grade Serous Ovarian Cancer (HGSOC) and other cancer types.
+
+---
 
 ## 🔬 Project Overview
 The project involves processing whole-transcriptome bulk RNA-Seq data from clinical biopsies (Canbuild study) and public databases (TCGA) to discover lncRNAs correlated with disease severity, tumor purity, and patient survival.
@@ -16,34 +18,26 @@ The project involves processing whole-transcriptome bulk RNA-Seq data from clini
 
 ---
 
-## 💻 Bioinformatics Workflow & Tools
+## 📂 Repository Structure & Workflow
 
-### 1. Upstream Processing (Alignment & Assembly)
-- **Read Alignment:** `Hisat2 (v2.1.0)` mapped to Gencode v29 / GRCh38.p12 reference genome.
-- **De novo Transcript Assembly:** `StringTie (v1.3.5)` used to merge and assemble transcripts into a master GTF.
+### 1. Upstream Processing & HPC Operations
+- **`commands.sh`**
+  - Logs of high-performance computing operations on the cluster.
+  - Demonstrates competency in handling restricted root permissions (manual local compilation of `HTSeq v0.6.1p1`), environment module swapping (Python 3.8.3 and R 4.0.2), and secure data transfer via SSH port forwarding from a firewalled cluster.
+- **`htseq_counts25.py`**
+  - Custom Python script used to automate the iterative parsing of individual sample count files, merging them into a unified raw count matrix (`htseq_all_count.csv`).
 
-### 2. LncRNA Filtering Criteria
-To identify high-confidence long non-coding RNAs from de novo assembly, transcripts were filtered based on:
-- Removal of mono-exonic genes and genes < 200nt.
-- Exclusion of Ensembl coding genes and pseudogenes.
-- Coding potential assessment using `CPAT (v1.2.4)`.
-- Specific biotype filtering (lincRNA, antisense, processed_transcript, etc.).
+### 2. Downstream Analysis & Clinical Validation
+- **`01_normalization_and_correlation.R`**
+  - **Data Wrangling:** Resolved critical sample-name mismatch issues between TCGA clinical metadata and HTSeq output matrices (handling `X` prefixes and `.` vs `-` delimiters).
+  - **Normalisation:** Applied `edgeR` and `limma-voom` workflows. Filtered out low-abundance genes present in less than 33% of the cohort.
+  - **Differential Expression & Hypothesis Testing:** Implemented linear modeling (`lmFit`) to identify candidate lncRNAs. Conducted Shapiro-Wilk tests for normality, followed by independent T-tests and Pearson’s correlation to validate the relationship between `l_LNC14112` and its host gene `REV3L`.
 
-### 3. Quantification & Downstream Analysis
-- **Quantification:** `HTSeq (v0.11.1)` to generate raw count matrices.
-- **Normalisation:** `limma-voom` transformation via the `limma` R-package (filtering out genes with < 1 count in 1/3 of samples).
-- **Tumor Purity Estimation:** Computed via `ESTIMATE` immune and stromal signatures and cross-referenced with disease-centric ESTIMATE results.
-- **Statistical Analysis:** 
-  - Pearson’s correlation coefficient for expression analyses.
-  - Kaplan-Meier Survival Analysis using `survminer` and `ggplot2` R-packages.
+- **`02_survival_analysis.R`**
+  - **Algorithm:** Implements a data-driven approach to identify the optimal prognostic threshold. A custom function `FindBestCutoff_FromVectors` iterates through the 20th to 80th percentiles of the risk scores to fit Cox proportional hazards models and select the cut-off that minimizes the Wald test P-value.
+  - **Visualization:** Generates high-quality Kaplan-Meier curves with risk tables using `survminer` and `ggplot2` for `l_LNC14112`, `REV3L`, and their ratio.
 
 ---
-
-## 📂 Repository Structure
-*(Tip: Update this section based on the exact files you upload!)*
-- `survival_analysis.R`: R scripts for Kaplan-Meier plotting and determining best cut-offs.
-- `deg_and_correlation.R`: R scripts for expression normalisation (limma-voom) and Pearson correlation.
-- `lncRNA_filtering.py` / `commands.sh`: Scripts or command logs used for filtering and upstream processing.
 
 *Note: Raw sequencing BAM/FASTQ files and controlled-access TCGA datasets are not included in this repository due to size and privacy constraints.*
 
