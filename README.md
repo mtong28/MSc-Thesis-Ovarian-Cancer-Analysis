@@ -1,11 +1,13 @@
-# MSc-Thesis-Ovarian-Cancer-Analysis (Transcriptomic Analysis)
+# Transcriptomic Analysis Pipeline & Multi-Cancer Validation
 
-This repository contains the core workflow, Linux environment logs, custom Python scripts, and R scripts used for my MSc thesis at Queen Mary University of London. The project focuses on the identification and validation of disease-associated lncRNAs in High-Grade Serous Ovarian Cancer (HGSOC) and other cancer types.
+**MSc Thesis Project: Identification of disease-associated lncRNAs in HGSOC and cross-cancer validation.**
 
 ---
 
 ## 🔬 Project Overview
-The project involves processing whole-transcriptome bulk RNA-Seq data from clinical biopsies (Canbuild study) and public databases (TCGA) to discover lncRNAs correlated with disease severity, tumor purity, and patient survival.
+This repository (originally developed for my MSc thesis: *Ovarian Cancer Analysis*) contains a **robust bioinformatics pipeline** designed for the end-to-end processing of transcriptomic data. 
+
+While the primary application was **High-Grade Serous Ovarian Cancer (HGSOC)**, the workflow is architected for **pan-cancer extensibility**. I have specifically implemented validation logic to leverage large-scale datasets from **TCGA**, including **Breast Cancer (BRCA)**, to identify shared regulatory axes and prognostic signatures.
 
 ---
 
